@@ -1,0 +1,75 @@
+Question 1: Converting between HW1 grammar and a HW2 grammar
+To switch between the two types of grammars, I first noticed that the start
+symbol in each grammar is the same, so I could just use the same expression
+for both grammars. For the production function, I created a more general
+production function, one that took in the grammar and the desired symbol. It
+recursively scans the rules of the grammar for the desired symbol, returning a 
+list of the right hand side of rules whose left hand side matched the desired 
+symbols. To get the production function specific to the grammar input into
+convert_grammar, I curried the production function by passing it the input
+grammar, so that in the future, all that would be needed is the input symbol.
+
+Question 2: Writing a matcher for the grammar gram
+I initially tried to solve this question in an iterative way, substituting 
+a nonterminal whenever possible. I used only one recursive function, and this
+made backtracking difficult, as there was no record of the history or which 
+rules I had already tried. In addition, the function quickly grew extremely
+complicated, making it difficult to understand what was going on and proceed
+further. I tried to make this approach work, but it was taking too much time
+so I gave up on the approach and looked for a different view on the problem.
+
+After reading the discussion notes of Seunghyun Yoo, posted at 
+http://bit.ly/2GDm8dH, I realized that the nature of the problem
+was much more suited towards two functions that were mutually recursive. In
+addition, the solution to the problem behaves like a depth first search in a
+tree, with the nodes of the trees being nonterminals, leaves being terminals, 
+and the branch of a node being the right hand side of the nonterminal. The 
+objective of the problem then became to find the path in the tree that ended
+with the fragment as its leaves. With this visualization of the problem, I 
+realized that the problem could be easily solved using two mutually recursive
+functions. 
+
+The first function makes progress horizontally on the tree; that is, it walks
+across the branches of a node, checking that the entire node is matched by a
+sequence of terminals in the fragment.
+
+The other function makes progress vertically on the tree; that is, it attempts
+to walk down the branches of the tree to match terminal symbols to the 
+fragment. In this way, the entire tree can be scanned until the depth first 
+search ends, and the correct fragment is found. 
+
+My function uses this picture in mind to solve the problem. I defined two
+helper functions, which are the mutually recursive functions described above,
+and the main parse_prefix function is a wrapper function that simply calls
+the vertical function on the start symbol, starting the search. 
+
+Weaknesses: Blind-alley rules
+In the event that a given rule does not actually lead to a possible sequence
+of terminals, instead looping around and around nonterminals, my function
+will never return and will go into an infinite loop. When the function is 
+currently considering the blind alley rule, it will substitute for the first
+nonterminal, which by definition of a blind alley rule will never lead to a 
+terminal, and so it will keep substituting for the nonterminal forever. For 
+example, the following test program will cause my function to loop infinitely.
+Start = Expr
+Expr -> N Expr, N Num
+Num -> N Expr, N Num
+
+Weaknesses: Left-side recursion
+In the event that the first rule for a nonterminal is immediately self
+referential, my function will never return and will go into an infinite loop. 
+This is because when the function reaches the nonterminal, the first rule
+it will attempt to substitute the nonterminal for contains the nonterminal, 
+so the program will go into an infinite loop of substitution for the symbol.
+If the rule is not immediately self referential, e.g. it has a terminal
+before calling itself, this problem will not happen, as progress can be made
+on the fragment due to the terminal symbol. As an example of a bad program,
+the following test program will cause my function to loop infinitely.
+Start = Expr
+Expr -> N Expr, N Num
+Expr -> T "Hi"
+Num -> T "1"
+Even though the following fragment technically has a derivation, my program 
+does not find it, as it repeatedly substitutes for Expr instead of skipping
+the first rule and looking directly for "Hi". 
+["Hi"]

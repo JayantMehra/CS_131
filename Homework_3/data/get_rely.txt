@@ -1,0 +1,17 @@
+Iterations: 1000
+Success: 0
+Mismatch: 30
+Loop: 0
+Reliability: 0.0%
+
+Iterations: 10000
+Success: 1
+Mismatch: 27
+Loop: 3
+Reliability: 3.3%
+
+Iterations: 100000
+Success: 0
+Mismatch: 2
+Loop: 28
+Reliability: 0.0%

@@ -1,0 +1,24 @@
+Null State: Threads
+358.085,925.087,1537.90,3163.18,10980.9,23213.1
+,Null State: Iterations
+98930.9,17907.4,2999.90,1416.61,729.525
+,Null State: Size of array
+2972.26,5409.51,3227.79,3463.28,5790.61,3518.12,3017.13
+,Null State: Sum of values
+4737.85,5402.91,3530.88,3009.00,3043.35
+,Synchronized State: Threads
+332.134,1125.85,1847.94,7211.43,9064.34,25013.3
+,Synchronized State: Iterations
+116637,18201.4,4617.70,1497.46,853.578
+,Synchronized State: Size of array
+6760.21,6670.23,7272.65,4067.63,7317.54,4532.59,5134.72
+,Synchronized State: Sum of values
+4773.51,6721.51,5077.28,4276.35,6029.86
+,BetterSafe State: Threads
+617.236,1503.62,3310.03,6869.08,15494.1,32719.5
+,BetterSafe State: Iterations
+161274,34876.2,6658.33,2132.72,707.499
+,BetterSafe State: Size of array
+6798.30,7043.40,6941.90,6935.85,7099.14,6861.88,7475.12
+,BetterSafe State: Sum of values
+7280.58,7025.68,7103.32,7054.63,7278.69,
